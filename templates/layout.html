@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+        <title>{% block title %} {% endblock %}</title>
+        <link href="/static/css/bootstrap.css" rel="stylesheet">
+        <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    </head>
+    <body  >
+        <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-toggle"></span>
+                    </button>
+                    <a class="navbar-brand" href="/admin">Blog admin</a>
+                </div>
+                {% if data %}
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="/">
+                                <i class="glyphicon glyphicon glyphicon-list-alt"></i> Navigation <span class="caret"></span></a>
+                            <ul id="g-account-menu" class="dropdown-menu" role="menu">
+                                <li><a href="/admin/add-post">Add post</a></li>
+                                <li><a href="/admin">View posts</a></li>
+                                <li><a href="/admin/view-users">View Users</a></li>
+                                <li><a href="/admin/register">Add user</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+        <div class="container">
+            {% if data %}
+                <div style="font-size: 11px; padding-bottom: 20px;">
+                You are Logged in as {{data["nick"]}}, <a href="/admin/logout">logout</a>.
+                </div>
+            {%endif%}
+            {% block body %}{% endblock %}
+        </div>
+        <footer class="text-center" style="margin-top:30px;font-size:12px;padding-top:10px;border-top: 1pt solid #ebebeb;width: 100%; z-index: 4; padding-bottom: 30px; background-color: #ffffff">
+             Copyright © 2012 Pregmatch.org, Licensed under the Apache License, Version 2.0.
+        </footer>
+
+        <script type='text/javascript' src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+    </body>
+</html>

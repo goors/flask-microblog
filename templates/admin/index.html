@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}
+    Posts
+{% endblock %}
+{% block body %}
+        <div class="col-xs-12">
+            {%if posts|length == 0 %}
+
+                <div style="margin: 0 auto; width: 200px; margin-top: 100px;">No posts in here :( <a class="bg-info" href="/admin/add-post">Add some</a></div>
+            {% else %}
+
+            <table class="table table-responsive">
+                <thead>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Created at</th>
+                <th>::</th>
+                </thead>
+                <tbody>
+                    {% for post in posts%}
+                    <tr>
+                        <td style="vertical-align: middle">{{ post.Id }}</td>
+                        <td style="vertical-align: middle;">
+                            {{ post.Title }}
+                        </td>
+                        <td style="vertical-align: middle">{{ post.Slug }}</td>
+                        <td style="vertical-align: middle">{{ post.DateCreated }}</td>
+                        <td style="vertical-align: middle">
+                            <a href="/admin/edit-post/{{post.Id}}">Edit</a> <br />
+                            <a href="/admin/delete-post/{{ post.Id}}">Delete</a>
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+            {%endif%}
+        </div>
+{% endblock %}

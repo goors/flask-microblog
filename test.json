@@ -1,0 +1,21 @@
+{
+  "message": "All testimonials",
+  "response": [
+    {
+      "name": "Ellie the Dog",
+      "photo": "upload/people/TestimonialPhoto-Ellie1.jpg",
+      "text": "Please take me on a walk."
+    },
+    {
+      "name": "Shawn",
+      "photo": "upload/people/Testimonialphoto-Shawn2.jpg",
+      "text": "It was convenient and cost the same as taking my cleaning to the cleaners myself. It makes sense."
+    },
+    {
+      "name": "Brooke",
+      "photo": "upload/people/Testimonialphoto-Brooke2.jpg",
+      "text": "I found Snazzy to be reliable and they did a great job with even my tough clothes. Delivery saves me time and allows me to focus on what's important."
+    }
+  ],
+  "status": 1
+}
