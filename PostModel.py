@@ -17,13 +17,19 @@ class PostModel:
         self.cryptkey = appconfig.CRYPT_KEY
 
 
-    def posts(self):
+    def posts(self, fe = None, tag = None):
 
         db = DB()
-        sql = '''SELECT * FROM Post p WHERE p.User=%s'''
+        if fe:
+            sql = '''SELECT * FROM Post p LIMIT 0, 3'''
+            query = db.query(sql )
+        elif tag:
+            sql = '''SELECT * FROM Post p LEFT JOIN PostTag pt ON p.Id=pt.Post WHERE pt.Tag=%s GROUP BY pt.Post '''
+            query = db.query(sql, (tag, ))
+        else:
+            sql = '''SELECT * FROM Post p WHERE p.User=%s'''
+            query = db.query(sql, (session["auth"]["Id"], ))
 
-
-        query = db.query(sql, (session["auth"]["Id"], ))
         posts = query.fetchall()
         db.close()
 
@@ -60,14 +66,14 @@ class PostModel:
     def deletePost(self, id):
         db = DB();
 
-
-        delSql = '''DELETE FROM PostTag WHERE Post=%s'''
-        db.query(delSql,(id))
-        db.conn.commit();
+        if (self.getPostTags(id)):
+            delSql = '''DELETE FROM PostTag WHERE Post=%s'''
+            db.query(delSql,(id,))
+            db.conn.commit();
 
 
         sql = '''DELETE FROM Post WHERE  Id=%s'''
-        db.query(sql, (id))
+        db.query(sql, (id,))
         db.conn.commit();
         db.close();
 
@@ -89,7 +95,7 @@ class PostModel:
         if (self.getPostTags(post)):
 
             delSql = '''DELETE FROM PostTag WHERE Post=%s'''
-            db.query(delSql,(post))
+            db.query(delSql,(post,))
             db.conn.commit();
 
         for tag in tags:
@@ -109,6 +115,19 @@ class PostModel:
 
         query = db.query(sql, (id, ))
         post = query.fetchall()
+        db.close()
+
+        if post:
+            return post
+        return False
+
+    def post(self, slug):
+        db = DB()
+        sql = '''SELECT * FROM Post p WHERE p.Slug=%s'''
+
+
+        query = db.query(sql, (slug, ))
+        post = query.fetchone()
         db.close()
 
         if post:

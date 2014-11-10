@@ -3,18 +3,20 @@ from flask import Flask
 from controllers import account 
 from controllers import static
 from controllers import admin
-
+from controllers import fe
 
 
 
 account_api = account.account_api
 static_api = static.static_api
 admin_api = admin.admin_api
+fe = fe.fe
 
 app = Flask(__name__)
 app.register_blueprint(account_api)
 app.register_blueprint(static_api)
 app.register_blueprint(admin_api)
+app.register_blueprint(fe)
 
 app.config.from_object(__name__)
 
