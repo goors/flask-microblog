@@ -11,6 +11,7 @@
             </div>
 
             <div style="text-align: center;" class="col-xs-12">
+                {% if posts%}
                 {% for post in posts%}
                     <div style="text-align: center; margin-bottom: 20px" class="col-xs-12">
                         <h3>{{ post.Title }}</h3>
@@ -40,6 +41,9 @@
                         </div>
                     </div>
                 {% endfor %}
+                {% else %} <br /><br />
+                No posts for searched criteria.
+                {% endif %}
             </div>
 
         </div>
