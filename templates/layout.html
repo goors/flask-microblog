@@ -24,10 +24,17 @@
                             <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="/">
                                 <i class="glyphicon glyphicon glyphicon-list-alt"></i> Navigation <span class="caret"></span></a>
                             <ul id="g-account-menu" class="dropdown-menu" role="menu">
+                                <li><a href="/admin">Posts</a></li>
                                 <li><a href="/admin/add-post">Add post</a></li>
-                                <li><a href="/admin">View posts</a></li>
-                                <li><a href="/admin/view-users">View Users</a></li>
+                                <li><a href="/admin/users">Users</a></li>
                                 <li><a href="/admin/register">Add user</a></li>
+                                <hr>
+                                <li style="font-size: 11px; text-align: center">
+                                    {% if data %}
+                                            You are Logged in as <br />{{data["nick"]}}, <a href="/admin/logout">logout</a>.
+                                    {%endif%}
+                                </li>
+
                             </ul>
                         </li>
                     </ul>
@@ -37,11 +44,7 @@
 
         </div>
         <div class="container">
-            {% if data %}
-                <div style="font-size: 11px; padding-bottom: 20px;">
-                You are Logged in as {{data["nick"]}}, <a href="/admin/logout">logout</a>.
-                </div>
-            {%endif%}
+
             {% block body %}{% endblock %}
         </div>
         <footer class="text-center" style="margin-top:30px;font-size:12px;padding-top:10px;border-top: 1pt solid #ebebeb;width: 100%; z-index: 4; padding-bottom: 30px; background-color: #ffffff">

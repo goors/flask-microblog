@@ -1,6 +1,6 @@
-from crossdomain import *
+
 from UserModel import *
-from flask import Blueprint, render_template, session, redirect, url_for
+from flask import Blueprint, render_template, session, redirect, url_for, request
 
 account_api = Blueprint('account_api', __name__)
 

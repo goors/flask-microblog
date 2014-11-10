@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, session, redirect, url_for, request, json
 from PostModel import  *
 from TagModel import  *
-from hasSession import  *
+from UserModel import  *
+
 admin_api = Blueprint('admin_api', __name__)
 
 
@@ -98,5 +99,39 @@ def deletepost(id=None):
         post.deletePost(id)
 
     return redirect("/admin/login")
+
+
+@admin_api.route('/admin/users', methods=['GET'])
+def users():
+
+    if(session):
+        user = UserModel();
+        return render_template("admin/users.html", users=user.list(), data=session['auth'])
+    return redirect("/admin/login")
+
+@admin_api.route('/admin/edit-user/<id>', methods=['GET','POST'])
+def edituser(id = None):
+
+    if(session):
+        user = UserModel()
+
+        if request.method == "POST":
+            user.register(request.form['email'], request.form['password'], request.form['nick'], request.form['role'], id)
+
+        return render_template("admin/add-user.html", data=session['auth'], user=user.getUser(id))
+    return redirect("/admin/login")
+
+@admin_api.route('/admin/register', methods=['GET','POST'])
+def adduser():
+
+    if(session):
+        user = UserModel()
+
+        if request.method == "POST":
+            user.register(request.form['email'], request.form['password'], request.form['nick'], request.form['role'])
+
+        return render_template("admin/add-user.html", data=session['auth'])
+    return redirect("/admin/login")
+
 
 

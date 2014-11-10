@@ -34,11 +34,40 @@ class UserModel:
         return False
 
 
-    def register(self, email, password, nick, role):
+    def register(self, email, password, nick, role, id = None):
 
 
         db = DB()
-        sql = '''INSERT INTO User (Id, Nick, Email, Role, Password) VALUES (NULL, %s, %s, %s, %s) '''
-        db.query(sql, (nick, email, role, generate_password_hash(password)))
+        if id:
+            sql = '''UPDATE User set Nick=%s, Email=%s, Role=%s, Password=%s '''
+        else:
+            sql = '''INSERT INTO User (Id, Nick, Email, Role, Password) VALUES (NULL, %s, %s, %s, %s) '''
+
+        q = db.query(sql, (nick, email, role, generate_password_hash(password)))
         db.conn.commit()
         #Todo add send email method
+        return q.lastrowid
+
+    def list(self):
+        db = DB()
+        sql = '''SELECT * FROM User '''
+
+        query = db.query(sql)
+        users = query.fetchall()
+        db.close()
+
+        if users:
+            return  users
+        return False
+
+    def getUser(self, id):
+        db = DB()
+        sql = '''SELECT * FROM User WHERE Id=%s'''
+
+        query = db.query(sql, (id,))
+        user = query.fetchone()
+        db.close()
+
+        if user:
+            return  user
+        return False

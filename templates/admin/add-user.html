@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}
+    {% if user %} Update user {% else %}Add user{% endif %}
+{% endblock %}
+{% block body %}
+        <div class="col-xs-12">
+            <form method="post" {% if user %} action="/admin/edit-user/{{user.Id}}" {% endif%}>
+            <div class="form-group">
+                <input type="text" {% if user %} value="{{user.Nick}}" {% endif%} name="nick" class="form-control" placeholder="Nick" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="email" {% if user %} value="{{user.Email}}" {% endif%} class="form-control" placeholder="Email" />
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="Password" />
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="role" {% if user %} value="{{user.Role}}" {% endif%} class="form-control" placeholder="Role" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-danger" {% if user%}value="Update user"{%else%}value="Add user"{%endif%}  style="float:right;" />
+
+            </div>
+            </form>
+
+        </div>
+
+{% endblock %}

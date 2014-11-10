@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}
+    Users
+{% endblock %}
+{% block body %}
+        <div class="col-xs-12">
+            {%if users|length == 0 %}
+
+                <div style="margin: 0 auto; width: 200px; margin-top: 100px;">No users in here :( <a class="bg-info" href="/admin/add-post">Add some</a></div>
+            {% else %}
+
+            <table class="table table-responsive">
+                <thead>
+                <th>Id</th>
+                <th>Nick</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>::</th>
+                </thead>
+                <tbody>
+                    {% for user in users%}
+                    <tr>
+                        <td style="vertical-align: middle">{{ user.Id }}</td>
+                        <td style="vertical-align: middle;">
+                            {{ user.Nick }}
+                        </td>
+                        <td style="vertical-align: middle">{{ user.Email }}</td>
+                        <td style="vertical-align: middle">{{ user.Role }}</td>
+                        <td style="vertical-align: middle">
+                            <a href="/admin/edit-user/{{user.Id}}">Edit</a> <br />
+                            <a href="/admin/delete-user/{{ user.Id}}">Delete</a>
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+            {%endif%}
+        </div>
+{% endblock %}
