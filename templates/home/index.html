@@ -1,62 +1,74 @@
 {% extends "layout-fe.html" %}
 {% block title %}
-    Home
+Home
 {% endblock %}
 {% block body %}
-        <div class="col-xs-12">
-            <div style="text-align: center;" class="col-xs-12">
-                {% for tag in tags%}
-                    <a href="/{{ tag.TagName}}" style="color: #b6b9ba;font-size: {{ format_font(tag.Id) + 9  }}px">{{ tag.TagName}}</a>
-                {% endfor %}
-            </div>
+<div class="col-xs-12">
+    <div style="text-align: center;" class="col-xs-12">
+        {% for tag in tags%}
+        <a href="/{{ tag.TagName}}" style="color: #b6b9ba;font-size: {{ format_font(tag.Id) + 9  }}px">{{
+            tag.TagName}}</a>
+        {% endfor %}
+    </div>
 
-            <div style="text-align: center;" class="col-xs-12">
-                {% if posts%}
-                {% for post in posts%}
-                    <div style="text-align: center; margin-bottom: 20px" class="col-xs-12">
-                        <h3>{{ post.Title }}</h3>
-                        <span style="color: #b6b9ba; font-size: 11px"> post by <span style="color: #999">{{ getnick(post.User) }}</span>  on {{ post.DateCreated}}</span>
-                    </div>
-                    <div style="text-align: center;" class="col-xs-12">
-                        <div class="col-lg-4" style="margin-bottom: 20px">
-                            <img src="/static/files/{{ post.Photo }}" border="none" style="vertical-align: middle; margin-right: 10px">
-                            <div style="text-align: center; font-size: 11px; margin-top: 20px; margin-bottom: 20px" class="col-xs-12 share">
-                        Share this:
-                        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://pregmatch.org/read/{{post.Slug}}&t={{post.Title}}">
-                            <img src="/static/img/fb.png" border="none" >Facebook
-                        </a>
-                        <a href="https://twitter.com/share?url=http://pregmatch.org/read/{{post.Slug}}&text={{post.Title}}" >
-                            <img src="/static/img/tw.png" border="none" >Twitter
-                        </a>
-                        <a href="https://plus.google.com/share?url=http://pregmatch.org/read/{{post.Slug}}&text={{post.Title}}">
-                            <img src="/static/img/gp.png" border="none" >Google+
-                        </a>
-
-                        </div>
-                        </div>
-                        <div class="col-lg-8" style="text-align: left">
-                            {{ snap(post.Content)|safe }}
-                            <div style="clear: both"></div>
-                            <a href="/read/{{ post.Slug }}" style="display: block; margin-top: 10px;">Read more</a>
-                        </div>
-                    </div>
-                {% endfor %}
-                {% else %} <br /><br />
-                No posts for searched criteria.
-                {% endif %}
-            </div>
-
+    <div style="text-align: center;" class="col-xs-12">
+        {% if posts%}
+        {% for post in posts%}
+        <div style="text-align: center; margin-bottom: 20px" class="col-xs-12">
+            <h3 style="cursor: pointer; " onclick="javascript: window.location.href='/read/{{ post.Slug }}'">{{
+                post.Title }}</h3>
+            <span style="color: #b6b9ba; font-size: 11px"> post by <span
+                    style="color: #999">{{ getnick(post.User) }}</span>  on {{ post.DateCreated}}</span>
         </div>
-        <style>
-            .col-xs-12.share a{
-                color: #23ada6; font-size: 11px
-            }
-            .col-xs-12.share a img{
-                vertical-align: middle; margin-top: -3px;
-                margin-right: 5px;
+        <div style="text-align: center;" class="col-xs-12">
+            <div class="col-lg-4" style="margin-bottom: 20px">
+                <img src="/static/files/{{ post.Photo }}" border="none"
+                     style="vertical-align: middle; margin-right: 10px">
 
-            }
-        </style>
+                <div style="text-align: center; font-size: 11px; margin-top: 20px; margin-bottom: 20px"
+                     class="col-xs-12 share">
+                    Share this:
+                    <a target="_blank"
+                       href="https://www.facebook.com/sharer/sharer.php?u=http://pregmatch.org/read/{{post.Slug}}&t={{post.Title}}">
+                        <img src="/static/img/fb.png" border="none">Facebook
+                    </a>
+                    <a href="https://twitter.com/share?url=http://pregmatch.org/read/{{post.Slug}}&text={{post.Title}}">
+                        <img src="/static/img/tw.png" border="none">Twitter
+                    </a>
+                    <a href="https://plus.google.com/share?url=http://pregmatch.org/read/{{post.Slug}}&text={{post.Title}}">
+                        <img src="/static/img/gp.png" border="none">Google+
+                    </a>
+
+                </div>
+            </div>
+            <div class="col-lg-8" style="text-align: left">
+                {{ snap(post.Content)|safe }}
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+
+        {% endfor %}
+        {% else %} <br/><br/>
+        No posts for searched criteria.
+        {% endif %}
+
+    </div>
+
+</div>
+
+<style>
+    .col-xs-12.share a {
+        color: #23ada6;
+        font-size: 11px
+    }
+
+    .col-xs-12.share a img {
+        vertical-align: middle;
+        margin-top: -3px;
+        margin-right: 5px;
+
+    }
+</style>
 {% endblock %}
         
         

@@ -133,3 +133,16 @@ class PostModel:
         if post:
             return post
         return False
+
+    def getPostBySlug(self, slug):
+        db = DB()
+        sql = '''SELECT * FROM Post p WHERE p.Slug=%s'''
+
+
+        query = db.query(sql, (slug, ))
+        post = query.fetchone()
+        db.close()
+
+        if post:
+            return post['Id']
+        return False
