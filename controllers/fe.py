@@ -1,8 +1,11 @@
-from flask import Blueprint, redirect, render_template
+from flask import Blueprint, redirect, render_template, request
 from TagModel import *
 from PostModel import *
 from UserModel import *
+from CommentModel import *
+
 fe = Blueprint('fe', __name__)
+
 
 @fe.route('/<tagname>', methods=['GET'])
 def hometags(tagname=None):
@@ -20,13 +23,19 @@ def home():
     return render_template("home/index.html", tags=tag.tags(), posts=post.posts(True, None))
 
 
-@fe.route('/read/<slug>', methods=['GET'])
+@fe.route('/read/<slug>', methods=['GET','POST'])
 def read(slug=None):
 
     tag = TagModel()
     post = PostModel()
+    comment = CommentModel()
+    if request.method == "POST":
 
-    return render_template("home/read.html", tags=tag.tags(), post=post.post(slug))
+        if 'comment' in request.form:
+            id = post.getPostBySlug(slug)
+            comment.addcomment(request.form['comment'], request.form['email'], request.form['nick'], id)
+
+    return render_template("home/read.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments())
 
 #helper methods
 

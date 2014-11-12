@@ -1,6 +1,6 @@
 {% extends "layout-fe.html" %}
 {% block title %}
-Home
+{{ post.Title }}
 {% endblock %}
 {% block body %}
 <div class="col-xs-12">
@@ -16,16 +16,7 @@ Home
             <h3>{{ post.Title }}</h3>
             <span style="color: #b6b9ba; font-size: 11px"> post by <span
                     style="color: #999">{{ getnick(post.User) }}</span>  on {{ post.DateCreated}}</span>
-            <br/><br /> Share this:
-                        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://pregmatch.org/read/{{post.Slug}}&t={{post.Title}}">
-                            <img src="/static/img/fb.png" border="none" >Facebook
-                        </a>
-                        <a href="https://twitter.com/share?url=http://pregmatch.org/read/{{post.Slug}}&text={{post.Title}}" >
-                            <img src="/static/img/tw.png" border="none" >Twitter
-                        </a>
-                        <a href="https://plus.google.com/share?url=http://pregmatch.org/read/{{post.Slug}}&text={{post.Title}}">
-                            <img src="/static/img/gp.png" border="none" >Google+
-                        </a>
+
         </div>
         <div style="text-align: center;" class="col-xs-12">
 
@@ -34,6 +25,31 @@ Home
                 <div style="clear: both"></div>
             </div>
 
+        </div>
+        <div class="col-xs-12">
+            <form method="post" action="/read/{{post.Slug}}">
+                <br />
+                <div class="form-group">
+                    <input type="text" class="form-control" name="nick" placeholder="Nick (optional)" />
+                </div>
+                <div class="form-group">
+                <input type="text" class="form-control" name="email" placeholder="Email (optional)" />
+                    </div>
+                <textarea name="comment" class="form-control" rows="10" placeholder="Comment (mandatory)"></textarea>
+                <span style="font-size: 11px; float: left">You can use any html tag (p, pre ...)</span><br />
+                <input type="submit" value="Add comment" class="btn btn-primary" style="float: right" />
+            </form>
+            <div class="col-lg-12" style="text-align: left">
+                {% if comments %}
+                <hr />
+                {% for comment in comments%}
+                <span>Comment by: {{ comment.Nick }} - <span style="font-size: 11px;">created at {{ comment.DateCreated }}</span></span><br />
+                <div class="col-lg-12" style="text-align: left; margin-top: 10px">
+                    {{comment.Comment | safe}}
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
