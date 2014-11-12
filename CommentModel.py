@@ -6,12 +6,12 @@ class CommentModel:
         self.cryptkey = appconfig.CRYPT_KEY
 
 
-    def comments(self):
+    def comments(self, post):
 
         db = DB()
-        sql = '''SELECT * FROM Comment'''
+        sql = '''SELECT * FROM Comment WHERE Post=%s'''
 
-        query = db.query(sql)
+        query = db.query(sql, (post,))
         comments = query.fetchall()
 
         db.close()
