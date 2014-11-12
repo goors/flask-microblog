@@ -29,13 +29,14 @@ def read(slug=None):
     tag = TagModel()
     post = PostModel()
     comment = CommentModel()
+    id = post.getPostBySlug(slug)
     if request.method == "POST":
 
         if 'comment' in request.form:
-            id = post.getPostBySlug(slug)
+
             comment.addcomment(request.form['comment'], request.form['email'], request.form['nick'], id)
 
-    return render_template("home/read.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments())
+    return render_template("home/read.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments(id))
 
 #helper methods
 
