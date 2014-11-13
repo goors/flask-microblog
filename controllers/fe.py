@@ -59,5 +59,6 @@ def utility_processor():
 def utility_processor():
     def getnick(id):
         u = UserModel()
-        return u.getUser(id)['Nick']
+        user = u.getUser(id)
+        return user.Nick
     return dict(getnick=getnick)

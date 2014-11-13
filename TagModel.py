@@ -2,19 +2,11 @@ from DB import *
 
 class TagModel:
 
-    def __init__(self):
-        self.cryptkey = appconfig.CRYPT_KEY
-
 
     def tags(self):
 
-        db = DB()
-        sql = '''SELECT * FROM Tag'''
-
-        query = db.query(sql)
-        tags = query.fetchall()
-
-        db.close()
+        from models.Tag import Tag
+        tags = Tag.query.all()
 
         if tags:
             return tags
@@ -34,6 +26,7 @@ class TagModel:
         #todo return id or something
 
     def getRepeats(self, id):
+
         db = DB()
         sql = '''SELECT COUNT(*) as c FROM PostTag WHERE  Tag=%s'''
 
@@ -43,16 +36,12 @@ class TagModel:
         return tags['c']
 
     def getTagByName(self, name):
-        print name
-        db = DB()
-        sql = '''SELECT * FROM Tag WHERE TagName=%s'''
 
-        query = db.query(sql, (name, ))
-        tags = query.fetchone()
+        from models.Tag import Tag
+        tag = Tag.query.filter_by(TagName=name).first()
 
-        db.close()
 
-        if tags:
-            return tags['Id']
+        if tag:
+            return tag.Id
         return False
 

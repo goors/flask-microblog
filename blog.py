@@ -4,7 +4,7 @@ from controllers import account
 from controllers import static
 from controllers import admin
 from controllers import fe
-
+from appconfig import *
 
 
 account_api = account.account_api
@@ -19,6 +19,7 @@ app.register_blueprint(admin_api)
 app.register_blueprint(fe)
 
 app.config.from_object(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://'+USER+':'+PASS+'@'+HOST+'/'+DATABASE
 
 app.config.update(dict(
     DEBUG=True,

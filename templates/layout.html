@@ -17,7 +17,7 @@
                     </button>
                     <a class="navbar-brand" href="/admin">Blog admin</a>
                 </div>
-                {% if data %}
+                {% if session %}
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
 
@@ -31,8 +31,8 @@
                                 <li><a href="/admin/register">Add user</a></li>
                                 <hr>
                                 <li style="font-size: 11px; text-align: center">
-                                    {% if data %}
-                                            You are Logged in as <br />{{data["nick"]}}, <a href="/admin/logout">logout</a>.
+                                    {% if session %}
+                                            You are Logged in as <br />{{session["nick"]}}, <a href="/admin/logout">logout</a>.
                                     {%endif%}
                                 </li>
 

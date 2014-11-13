@@ -1,72 +1,58 @@
-from DB import *
-
 import appconfig
-import datetime
 from flask import session
-from werkzeug.security import generate_password_hash, check_password_hash
-class UserModel:
 
-    def __init__(self):
-        self.cryptkey = appconfig.CRYPT_KEY
+
+
+class UserModel:
 
 
     def login(self, email, password):
 
-        db = DB()
-        sql = '''SELECT
-                      u.Email as email,
-                      u.Role as role,
-                      u.Nick as nick,
-                      u.Password as password,
-                      u.Id as Id
+        from models.User import User
+        user = User.query.filter_by(Email = email).first()
+        if user and user.check_password(password):
 
-                      FROM User u
-                         WHERE u.Email=%s'''
-
-
-        query = db.query(sql, (email, ))
-        user = query.fetchone()
-        db.close()
-
-        if user and check_password_hash(user["password"], password):
-            session['auth'] = user
+            session['email'] = user.Email
+            session['nick'] = user.Nick
+            session['Id'] = user.Id
             return True
         return False
+
 
 
     def register(self, email, password, nick, role, id = None):
 
 
-        db = DB()
-        if id:
-            sql = '''UPDATE User set Nick=%s, Email=%s, Role=%s, Password=%s '''
-        else:
-            sql = '''INSERT INTO User (Id, Nick, Email, Role, Password) VALUES (NULL, %s, %s, %s, %s) '''
+        from models.User import User
+        from models.User import db
 
-        q = db.query(sql, (nick, email, role, generate_password_hash(password)))
-        db.conn.commit()
-        #Todo add send email method
-        return q.lastrowid
+        newuser = User(nick, email, role, password)
+        if id:
+            u = User.query.filter_by(Id=id).first()
+            u.Email = email
+            u.Role = role
+            u.set_password(password)
+            u.Nick = nick
+
+        else:
+            db.session.add(newuser)
+        res = db.session.commit()
+        print res
+
 
     def list(self):
-        db = DB()
-        sql = '''SELECT * FROM User '''
 
-        query = db.query(sql)
-        users = query.fetchall()
-        db.close()
-
+        from models.User import User
+        users = User.query.all()
         if users:
             return  users
         return False
 
     def getUser(self, id):
-        db = DB()
-        sql = '''SELECT * FROM User WHERE Id=%s'''
 
-        query = db.query(sql, (id,))
-        user = query.fetchone()
-        db.close()
+        from models.User import User
+        user = User.query.filter_by(Id=id).first()
+
 
         if user:
             return  user
