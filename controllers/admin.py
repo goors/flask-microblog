@@ -83,7 +83,7 @@ def addtag():
 def deletepost(id=None):
     post = PostModel()
     post.deletePost(id)
-
+    return redirect("/admin")
 
 
 @admin_api.route('/admin/users', methods=['GET'])
