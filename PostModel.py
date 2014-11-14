@@ -21,10 +21,10 @@ class PostModel:
 
         db = DB()
         if fe:
-            sql = '''SELECT * FROM Post p LIMIT 0, 30'''
+            sql = '''SELECT * FROM Post p LIMIT 0, 30 ORDER BY p.Id ASC'''
             query = db.query(sql )
         elif tag:
-            sql = '''SELECT * FROM Post p LEFT JOIN PostTag pt ON p.Id=pt.Post WHERE pt.Tag=%s GROUP BY pt.Post '''
+            sql = '''SELECT * FROM Post p LEFT JOIN PostTag pt ON p.Id=pt.Post WHERE pt.Tag=%s GROUP BY pt.Post ORDER BY p.Id ASC'''
             query = db.query(sql, (tag, ))
         else:
             sql = '''SELECT * FROM Post p WHERE p.User=%s'''
