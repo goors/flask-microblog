@@ -49,7 +49,7 @@ class PostModel:
             filename = p['Photo']
 
 
-        db = DB();
+        db = DB()
         if(id):
             sql = '''UPDATE Post SET Title=%s, DateModified=%s, Content=%s, Photo=%s, Slug=%s, PostStatus=%s WHERE Id=%s'''
             q = db.query(sql, (title, time.strftime('%Y-%m-%d %H:%M:%S'), content, filename, slug, active, id))
@@ -57,25 +57,25 @@ class PostModel:
             sql = '''INSERT INTO Post (Id, Title, DateCreated, Content, Photo, User, Slug, PostStatus) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)'''
             q = db.query(sql, (title, time.strftime('%Y-%m-%d %H:%M:%S'), content, filename, session['auth']['Id'], slug, active))
 
-        db.conn.commit();
-        db.close();
+        db.conn.commit()
+        db.close()
 
         #todo return something
-        return  q.lastrowid;
+        return  q.lastrowid
 
     def deletePost(self, id):
-        db = DB();
+        db = DB()
 
         if (self.getPostTags(id)):
             delSql = '''DELETE FROM PostTag WHERE Post=%s'''
             db.query(delSql,(id,))
-            db.conn.commit();
+            db.conn.commit()
 
 
         sql = '''DELETE FROM Post WHERE  Id=%s'''
         db.query(sql, (id,))
-        db.conn.commit();
-        db.close();
+        db.conn.commit()
+        db.close()
 
     def getPost(self, id):
         db = DB()
@@ -96,17 +96,17 @@ class PostModel:
 
             delSql = '''DELETE FROM PostTag WHERE Post=%s'''
             db.query(delSql,(post,))
-            db.conn.commit();
+            db.conn.commit()
 
         for tag in tags:
 
 
-            sql = '''INSERT INTO PostTag VALUES  (%s, %s);'''
+            sql = '''INSERT INTO PostTag VALUES  (%s, %s)'''
             db.query(sql,(tag, post))
 
 
-        db.conn.commit();
-        db.close();
+        db.conn.commit()
+        db.close()
 
     def getPostTags(self, id):
         db = DB()
