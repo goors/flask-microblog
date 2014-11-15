@@ -29,11 +29,15 @@
                     {% for tag in tags %}
                     <label style="float: right; margin-left: 10px; float: left" for="{{ tag.Id }}">
                         <input
+
                                 {% if postTags %}
                                 {% for t in postTags %}
-                                {% if t.Tag == tag.Id%}
+
+
+                                {% if t.tags.Id == tag.Id%}
                                 checked
                                 {%endif%}
+
                                 {% endfor %}
                                 {%endif%}
                                 type="checkbox"

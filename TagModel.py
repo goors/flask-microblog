@@ -1,6 +1,5 @@
-from DB import *
 
-class TagModel:
+class TagModel :
 
 
     def tags(self):
@@ -14,26 +13,24 @@ class TagModel:
 
     def addtag(self, name):
 
-        db = DB()
-        sql = '''INSERT INTO Tag (Id, TagName) VALUES (NULL, %s)'''
+        from models.Tag import Tag
+        from models.shared import db
 
-        q = db.query(sql, (name,) )
-        db.conn.commit()
-        db.close()
+        new_tag = Tag(name)
+        db.session.add(new_tag)
+        db.session.commit()
 
+        return new_tag.Id
 
-        return  q.lastrowid;
-        #todo return id or something
 
     def getRepeats(self, id):
 
-        db = DB()
-        sql = '''SELECT COUNT(*) as c FROM PostTag WHERE  Tag=%s'''
+        from models.Post import  Post
+        from models.Tag import  Tag
 
-        query = db.query(sql, (id,))
-        tags = query.fetchone()
-        db.close()
-        return tags['c']
+        u = Post.query.join(Post.tags).filter(Tag.Id == id).count()
+        return u
+
 
     def getTagByName(self, name):
 

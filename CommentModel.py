@@ -1,20 +1,10 @@
-from DB import *
-import time
 class CommentModel:
-
-    def __init__(self):
-        self.cryptkey = appconfig.CRYPT_KEY
 
 
     def comments(self, post):
 
-        db = DB()
-        sql = '''SELECT * FROM Comment WHERE Post=%s'''
-
-        query = db.query(sql, (post,))
-        comments = query.fetchall()
-
-        db.close()
+        from models.Comment import Comment
+        comments = Comment.query.filter_by(Post=post.Id).all()
 
         if comments:
             return comments
@@ -22,16 +12,13 @@ class CommentModel:
 
     def addcomment(self, comment, email, nick, post):
 
-        db = DB()
-        sql = '''INSERT INTO Comment (Id, Comment, Post, Nick, Email, DateCreated) VALUES (NULL, %s, %s, %s, %s, %s)'''
+        from models.Comment import Comment
+        from models.shared import db
 
-        q = db.query(sql, (comment,post,nick, email, time.strftime('%Y-%m-%d %H:%M:%S')) )
-        db.conn.commit()
-        db.close()
+        new_comment = Comment(nick, email, comment, post)
+        db.session.add(new_comment)
+        db.session.commit()
 
-
-        return  q.lastrowid;
-        #todo return id or something
-
+        return new_comment.Id
 
 
