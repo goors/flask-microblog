@@ -13,31 +13,26 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 class PostModel:
 
-    def __init__(self):
-        self.cryptkey = appconfig.CRYPT_KEY
 
 
     def posts(self, fe = None, tag = None):
 
-        db = DB()
+        from models.Post import Post
+        from models.Tag import Tag
+
         if fe:
-            sql = '''SELECT * FROM Post p LIMIT 0, 30 ORDER BY p.Id ASC'''
-            query = db.query(sql )
+            return Post.query.order_by(Post.Id.desc()).all()
+
         elif tag:
-            sql = '''SELECT * FROM Post p LEFT JOIN PostTag pt ON p.Id=pt.Post WHERE pt.Tag=%s GROUP BY pt.Post ORDER BY p.Id ASC'''
-            query = db.query(sql, (tag, ))
+            return Post.query.join(Post.tags).filter(Tag.Id == tag).all()
         else:
-            sql = '''SELECT * FROM Post p WHERE p.User=%s'''
-            query = db.query(sql, (session["Id"], ))
+            return Post.query.all()
 
-        posts = query.fetchall()
-        db.close()
 
-        if posts:
-            return posts
-        return False
 
     def addPost(self, title, slug, content, file, active, id=None):
+
+
 
         if file:
             filename = secure_filename(file.filename)
@@ -46,103 +41,106 @@ class PostModel:
         else:
             p = self.getPost(id)
 
-            filename = p['Photo']
+            filename = p.Photo
 
 
-        db = DB()
         if(id):
-            sql = '''UPDATE Post SET Title=%s, DateModified=%s, Content=%s, Photo=%s, Slug=%s, PostStatus=%s WHERE Id=%s'''
-            q = db.query(sql, (title, time.strftime('%Y-%m-%d %H:%M:%S'), content, filename, slug, active, id))
-        else:
-            sql = '''INSERT INTO Post (Id, Title, DateCreated, Content, Photo, User, Slug, PostStatus) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)'''
-            q = db.query(sql, (title, time.strftime('%Y-%m-%d %H:%M:%S'), content, filename, session['auth']['Id'], slug, active))
 
-        db.conn.commit()
-        db.close()
+            from models.shared import db
+            from models.Post import Post
+
+            p = Post.query.filter_by(Id=id).first()
+            p.Title = title
+            p.Slug = slug
+            p.Content = content
+            p.Photo = filename
+            p.PostStatus = active
+            db.session.commit()
+
+
+
+
+        else:
+
+
+            from models.shared import db
+            from models.Post import Post
+
+            p = Post(title, content, filename, session['Id'], slug, active, 0)
+            db.session.add(p)
+            db.session.commit()
+
 
         #todo return something
-        return  q.lastrowid
+        return  p.Id
 
     def deletePost(self, id):
-        db = DB()
 
-        if (self.getPostTags(id)):
-            delSql = '''DELETE FROM PostTag WHERE Post=%s'''
-            db.query(delSql,(id,))
-            db.conn.commit()
+        from models.shared import db
+        from models.Post import Post
 
 
-        sql = '''DELETE FROM Post WHERE  Id=%s'''
-        db.query(sql, (id,))
-        db.conn.commit()
-        db.close()
+        sql = 'DELETE FROM PostTag WHERE Post='+id
+        db.engine.execute(sql)
+        
+
+
+        singlepost = Post.query.filter_by(Id=id).first()
+        if singlepost:
+            db.session.delete(singlepost)
+            db.session.flush()
+
+
 
     def getPost(self, id):
-        db = DB()
-        sql = '''SELECT * FROM Post p WHERE p.Id=%s'''
+        from models.Post import Post
 
+        post = Post.query.filter_by(Id=id).first()
 
-        query = db.query(sql, (id, ))
-        post = query.fetchone()
-        db.close()
 
         if post:
             return post
         return False
 
     def addTags(self, tags, post):
-        db = DB()
-        if (self.getPostTags(post)):
 
-            delSql = '''DELETE FROM PostTag WHERE Post=%s'''
-            db.query(delSql,(post,))
-            db.conn.commit()
+
+        from models.shared import db
+
+        sql = 'DELETE FROM PostTag WHERE Post='+post
+        db.engine.execute(sql)
+        db.session.commit()
 
         for tag in tags:
 
 
-            sql = '''INSERT INTO PostTag VALUES  (%s, %s)'''
-            db.query(sql,(tag, post))
+            sql = 'INSERT INTO PostTag VALUES  (%s, %s)'
+            db.engine.execute(sql, (tag, post, ))
+            db.session.commit()
 
 
-        db.conn.commit()
-        db.close()
+
 
     def getPostTags(self, id):
-        db = DB()
-        sql = '''SELECT Tag FROM PostTag p WHERE p.Post=%s'''
 
+        from models.Post import Post
 
-        query = db.query(sql, (id, ))
-        post = query.fetchall()
-        db.close()
-
-        if post:
-            return post
+        posts = Post.query.join(Post.tags).filter(Post.Id == id).all()
+        if(posts):
+            return posts
         return False
+
+
+
 
     def post(self, slug):
-        db = DB()
-        sql = '''SELECT * FROM Post p WHERE p.Slug=%s'''
+        from models.Post import Post
 
+        post = Post.query.filter_by(Slug=slug).first()
 
-        query = db.query(sql, (slug, ))
-        post = query.fetchone()
-        db.close()
 
         if post:
             return post
         return False
 
-    def getPostBySlug(self, slug):
-        db = DB()
-        sql = '''SELECT * FROM Post p WHERE p.Slug=%s'''
 
-
-        query = db.query(sql, (slug, ))
-        post = query.fetchone()
-        db.close()
-
-        if post:
-            return post['Id']
-        return False
