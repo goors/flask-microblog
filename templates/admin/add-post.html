@@ -31,14 +31,15 @@
                         <input
 
                                 {% if postTags %}
-                                {% for t in postTags %}
 
+                                    {% for t in postTags %}
+                                        {% for b in t.tags%}
+                                            {% if b.Id == tag.Id%}
+                                                checked
+                                            {%endif%}
 
-                                {% if t.tags.Id == tag.Id%}
-                                checked
-                                {%endif%}
-
-                                {% endfor %}
+                                        {% endfor %}
+                                    {% endfor %}
                                 {%endif%}
                                 type="checkbox"
                                 name="tags" id="{{ tag.Id }}"
