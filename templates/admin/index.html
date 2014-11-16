@@ -12,6 +12,7 @@
             <table class="table table-responsive">
                 <thead>
                 <th>Id</th>
+                <th>Views</th>
                 <th>Title</th>
                 <th>Slug</th>
                 <th>Created at</th>
@@ -21,6 +22,7 @@
                     {% for post in posts%}
                     <tr>
                         <td style="vertical-align: middle">{{ post.Id }}</td>
+                        <td style="vertical-align: middle"><span class="label label-info">{{ post.NoOfViews }}</span></td>
                         <td style="vertical-align: middle;">
                             {{ post.Title }}
                         </td>

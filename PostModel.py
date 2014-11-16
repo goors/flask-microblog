@@ -145,6 +145,7 @@ class PostModel:
 
     def post(self, slug):
         from models.Post import Post
+        from models.shared import db
 
         post = Post.query.filter_by(Slug=slug).first()
 
