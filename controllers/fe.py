@@ -30,6 +30,12 @@ def read(slug=None):
     post = PostModel()
     comment = CommentModel()
     id = post.post(slug)
+    from models.shared import db
+    id.NoOfViews += 1
+    db.session.commit()
+
+
+
     if request.method == "POST":
 
         if 'comment' in request.form:
