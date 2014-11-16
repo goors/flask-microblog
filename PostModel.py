@@ -78,17 +78,20 @@ class PostModel:
 
         from models.shared import db
         from models.Post import Post
+        from models.Comment import Comment
 
 
-        sql = 'DELETE FROM PostTag WHERE Post='+id
-        db.engine.execute(sql)
-        
+        post = db.session.query(Post).get(id)
+        comments = Comment.query.filter_by(Post=id).all()
+        for c in comments:
+            db.session.delete(c)
+
+        post.tags = []
+
+        db.session.delete(post)
+        db.session.commit()
 
 
-        singlepost = Post.query.filter_by(Id=id).first()
-        if singlepost:
-            db.session.delete(singlepost)
-            db.session.flush()
 
 
 
@@ -106,17 +109,24 @@ class PostModel:
 
 
         from models.shared import db
+        from models.Post import Post
+        from models.Tag import Tag
 
-        sql = 'DELETE FROM PostTag WHERE Post='+post
-        db.engine.execute(sql)
-        db.session.commit()
+        postTags = db.session.query(Post).get(post)
+
+        if postTags.tags:
+            postTags.tags = []
+            db.session.commit()
+
 
         for tag in tags:
 
-
-            sql = 'INSERT INTO PostTag VALUES  (%s, %s)'
-            db.engine.execute(sql, (tag, post, ))
+            t = db.session.query(Tag).get(tag)
+            postTags.tags.append(t)
+            db.session.add(t)
             db.session.commit()
+
+            
 
 
 
