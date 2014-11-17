@@ -192,3 +192,27 @@ ADD CONSTRAINT `User` FOREIGN KEY (`User`) REFERENCES `User` (`Id`) ON DELETE NO
 ALTER TABLE `PostTag`
 ADD CONSTRAINT `fk_Tags_has_Post_Post1` FOREIGN KEY (`Post`) REFERENCES `Post` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
 ADD CONSTRAINT `fk_Tags_has_Post_Tags1` FOREIGN KEY (`Tag`) REFERENCES `Tag` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+CREATE TABLE IF NOT EXISTS `pregmatch`.`PostFile` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Post` INT NULL,
+  `FileName` VARCHAR(128) NULL,
+  PRIMARY KEY (`Id`),
+  INDEX `Post_idx` (`Post` ASC),
+  CONSTRAINT `Post_fk`
+    FOREIGN KEY (`Post`)
+    REFERENCES `pregmatch`.`Post` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+CREATE TABLE IF NOT EXISTS `pregmatch`.`PostImage` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `ImageName` VARCHAR(128) NULL,
+  `Post` INT NULL,
+  PRIMARY KEY (`Id`),
+  INDEX `Post_idx` (`Post` ASC),
+  CONSTRAINT `Post_fk_i`
+    FOREIGN KEY (`Post`)
+    REFERENCES `pregmatch`.`Post` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB

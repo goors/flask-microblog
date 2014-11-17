@@ -14,6 +14,8 @@ fe = fe.fe
 
 app = Flask(__name__)
 Compress(app)
+
+
 app.register_blueprint(account_api)
 app.register_blueprint(static_api)
 app.register_blueprint(admin_api)
