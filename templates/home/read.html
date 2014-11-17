@@ -19,7 +19,22 @@
 
         </div>
         <div style="text-align: center;" class="col-xs-12">
+            {% if postFiles %}
+                <hr />
+                    {% for file in postFiles%}
+                        <a class="label label-default" href="/static/files/{{file.FileName}}" id="file_{{file.Id}}">{{file.FileName}}</a>
+                    {% endfor %}<hr />
+                {% endif %}
+            {% if getimages(post.Id) %}
+                <hr />
+                {% for image in getimages(post.Id) %}
+                {% set im = "/static/files/th_"~image.ImageName%}
+                {% set imB = "/static/files/"~image.ImageName%}
 
+                <a href="{{imB}}"><img src="{{ im }}" style="border: 1px solid #ccc; padding: 1px;"></a>
+                {% endfor %}
+            <hr />
+                {% endif %}
             <div class="col-lg-12" style="text-align: left">
                 {{ post.Content|safe }}
                 <div style="clear: both"></div>
