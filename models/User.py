@@ -1,6 +1,6 @@
 from werkzeug import generate_password_hash, check_password_hash
 
-from shared import db
+from models import db
 
 class User(db.Model):
 

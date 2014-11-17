@@ -1,11 +1,16 @@
+class TagModel:
 
-class TagModel :
+    def __init__(self):
 
+        from models import Tag
+        from models import  Post
+
+        self.Tag = Tag.Tag
+        self.Post = Post.Post
 
     def tags(self):
 
-        from models.Tag import Tag
-        tags = Tag.query.all()
+        tags = self.Tag.query.all()
 
         if tags:
             return tags
@@ -13,10 +18,8 @@ class TagModel :
 
     def addtag(self, name):
 
-        from models.Tag import Tag
-        from models.shared import db
-
-        new_tag = Tag(name)
+        from models import db
+        new_tag = self.Tag(name)
         db.session.add(new_tag)
         db.session.commit()
 
@@ -25,18 +28,13 @@ class TagModel :
 
     def getRepeats(self, id):
 
-        from models.Post import  Post
-        from models.Tag import  Tag
-
-        u = Post.query.join(Post.tags).filter(Tag.Id == id).count()
+        u = self.Post.query.join(self.Post.tags).filter(self.Tag.Id == id).count()
         return u
 
 
     def getTagByName(self, name):
 
-        from models.Tag import Tag
-        tag = Tag.query.filter_by(TagName=name).first()
-
+        tag = self.Tag.query.filter_by(TagName=name).first()
 
         if tag:
             return tag.Id

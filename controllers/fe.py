@@ -26,7 +26,7 @@ def home():
 @fe.route('/read/<slug>', methods=['GET','POST'])
 def read(slug=None):
 
-    from models.shared import db
+    from models import db
     tag = TagModel()
     post = PostModel()
     comment = CommentModel()

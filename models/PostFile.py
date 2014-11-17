@@ -1,4 +1,4 @@
-from shared import db
+from models import db
 from models.Post import Post
 
 class PostFile(db.Model):

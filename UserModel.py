@@ -1,15 +1,20 @@
-import appconfig
 from flask import session
-
-
-
 class UserModel:
 
+    def __init__(self):
+
+        from models import Tag
+        from models import  Post
+        from models import  User
+
+        self.Tag = Tag.Tag
+        self.Post = Post.Post
+        self.User = User.User
 
     def login(self, email, password):
 
-        from models.User import User
-        user = User.query.filter_by(Email = email).first()
+
+        user = self.User.query.filter_by(Email = email).first()
         if user and user.check_password(password):
 
             session['email'] = user.Email
@@ -21,14 +26,10 @@ class UserModel:
 
 
     def register(self, email, password, nick, role, id = None):
-
-
-        from models.User import User
-        from models.User import db
-
-        newuser = User(nick, email, role, password)
+        from models import db
+        newuser = self.User(nick, email, role, password)
         if id:
-            u = User.query.filter_by(Id=id).first()
+            u = self.User.query.filter_by(Id=id).first()
             u.Email = email
             u.Role = role
             u.set_password(password)
@@ -42,17 +43,14 @@ class UserModel:
 
     def list(self):
 
-        from models.User import User
-        users = User.query.all()
+        users = self.User.query.all()
         if users:
             return  users
         return False
 
     def getUser(self, id):
 
-        from models.User import User
-        user = User.query.filter_by(Id=id).first()
-
+        user = self.User.query.filter_by(Id=id).first()
 
         if user:
             return  user
