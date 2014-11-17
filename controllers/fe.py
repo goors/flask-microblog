@@ -26,15 +26,16 @@ def home():
 @fe.route('/read/<slug>', methods=['GET','POST'])
 def read(slug=None):
 
+    from models.shared import db
     tag = TagModel()
     post = PostModel()
     comment = CommentModel()
     id = post.post(slug)
-    from models.shared import db
+
     id.NoOfViews += 1
     db.session.commit()
 
-
+    postFiles = post.getPostFiles(id.Id)
 
     if request.method == "POST":
 
@@ -42,7 +43,7 @@ def read(slug=None):
 
             comment.addcomment(request.form['comment'], request.form['email'], request.form['nick'], id.Id)
 
-    return render_template("home/read.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments(id))
+    return render_template("home/read.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments(id), postFiles=postFiles)
 
 #helper methods
 
@@ -68,3 +69,10 @@ def utility_processor():
         user = u.getUser(id)
         return user.Nick
     return dict(getnick=getnick)
+
+@fe.context_processor
+def utility_processor():
+    def getimages(id):
+        p = PostModel()
+        return p.getPostImages(id)
+    return dict(getimages=getimages)

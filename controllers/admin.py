@@ -32,6 +32,12 @@ def addpost():
         pid = post.addPost(request.form['title'], request.form['slug'], request.form['content'], request.files['photo'], active)
         post.addTags(request.form.getlist('tags'), pid);
 
+        if(request.files.getlist("files")):
+            post.addFiles(request.files.getlist("files"), pid)
+
+        if(request.files.getlist("images")):
+            post.addImages(request.files.getlist("images"), pid)
+
     return render_template('admin/add-post.html', tags=tags.tags())
 
 
@@ -45,7 +51,6 @@ def editpost(id=None):
 
 
         active = '1' if request.form.get('active') else '0'
-        print active
         if request.files['photo']:
 
             file = request.files['photo']
@@ -61,11 +66,19 @@ def editpost(id=None):
             active,
             id)
 
-        post.addTags(request.form.getlist('tags'), id);
-    single = post.getPost(id)
-    postTags = post.getPostTags(id);
+        post.addTags(request.form.getlist('tags'), id)
 
-    return render_template('admin/add-post.html', post=single, tags=tags.tags(), postTags=postTags)
+        if(len(request.files.getlist("files")) > 1):
+            post.addFiles(request.files.getlist("files"), id)
+        if(len(request.files.getlist("images")) > 1):
+            post.addImages(request.files.getlist("images"), id)
+
+    single = post.getPost(id)
+    postTags = post.getPostTags(id)
+    postFiles = post.getPostFiles(id)
+    postImages = post.getPostImages(id)
+
+    return render_template('admin/add-post.html', post=single, tags=tags.tags(), postTags=postTags, postFiles=postFiles, postImages=postImages)
 
 @admin_api.route('/admin/add-tag', methods=['POST'])
 def addtag():
@@ -76,6 +89,28 @@ def addtag():
             id = tags.addtag(request.json['name'])
             response = {'response': request.json['name'], 'status': 1, 'message': "Tag created", 'Id': id}
             print response
+        return json.jsonify(response)
+
+@admin_api.route('/admin/delete-file', methods=['POST'])
+def deletefile():
+    if request.method == "POST":
+
+        if request.json['id']:
+            post = PostModel()
+            post.removefile(request.json['id'])
+            response = {'status': 1, 'message': "Deleted"}
+
+        return json.jsonify(response)
+
+@admin_api.route('/admin/delete-image', methods=['POST'])
+def deleteimage():
+    if request.method == "POST":
+
+        if request.json['id']:
+            post = PostModel()
+            post.removeimage(request.json['id'])
+            response = {'status': 1, 'message': "Deleted"}
+
         return json.jsonify(response)
 
 

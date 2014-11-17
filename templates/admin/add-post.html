@@ -22,7 +22,30 @@
                     <input type="checkbox" name="active" {% if post   %} {% if post.PostStatus=='1' %}checked {% endif%} {% endif%} /> Is active?
                 </label>
             </div>
+            <hr />
+            <div class="form-group">
+                Add files to this post
+                <input type="file" name="files" multiple />
+                {% if postFiles %}
+                    {% for file in postFiles%}
+                        <a href="/static/files/{{file.FileName}}" id="file_{{file.Id}}">{{file.FileName}}</a>
+                        <a class="label label-danger" onclick="javacript: removeFile('{{file.Id}}', $(this), 'file')">x</a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <hr />
+            <div class="form-group">
+                Add images to gallery for this post
+                <input type="file" name="images" multiple />
 
+                {% if postImages %}
+                    {% for image in postImages%}
+                        <a href="/static/files/{{image.ImageName}}" id="file_{{image.Id}}">{{image.ImageName}}</a>
+                        <a class="label label-danger" onclick="javacript: removeFile('{{image.Id}}', $(this), 'image')">x</a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <hr />
             <div class="form-group" style="width: 100%" id="tags_holder">
 
                 {% if tags %}
@@ -90,6 +113,27 @@
                             var html = '<label style="float: right; margin-left: 10px; float: left" for="'+result.Id+'"><input type="checkbox" value="'+result.Id+'" name="tags" id="'+result.Id+'" /> '+result.response+'</label>';
                             //html.prependTo($("#tags_holder"));
                             $("#tags_holder").prepend(html);
+                        }
+                    }
+                });
+            }
+        }
+
+        function removeFile(id, el, type){
+            var g = id;
+            var id = {id:id}
+
+            if(id){
+
+                $.ajax({
+                    type : "POST",
+                    url : (type == 'file' ? "/admin/delete-file":"/admin/delete-image"),
+                    data: JSON.stringify(id, null, '\t'),
+                    contentType: 'application/json;charset=UTF-8',
+                    success: function(result) {
+                        if(result.status){
+                            el.remove();
+                            $("#file_"+g).remove();
                         }
                     }
                 });
