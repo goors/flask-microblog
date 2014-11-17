@@ -20,7 +20,7 @@ class PostModel:
         from models.Tag import Tag
 
         if fe:
-            return Post.query.order_by(Post.Id.desc()).all()
+            return Post.query.filter_by(PostStatus='1').order_by(Post.Id.desc()).all()
 
         elif tag:
             return Post.query.join(Post.tags).filter(Tag.Id == tag).all()
