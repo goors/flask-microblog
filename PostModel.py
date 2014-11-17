@@ -28,7 +28,6 @@ class PostModel:
 
     def posts(self, fe=None, tag=None):
 
-
         if fe:
             return self.Post.query.filter_by(PostStatus='1').order_by(self.Post.Id.desc()).all()
 

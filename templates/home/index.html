@@ -9,7 +9,7 @@
 <div class="col-xs-12">
     <div style="text-align: center;" class="col-xs-12">
         {% for tag in tags%}
-        <a href="/{{ tag.TagName}}" style="color: #b6b9ba;font-size: {{ format_font(tag.Id) + 9  }}px">{{
+        <a href="/tag/{{ tag.TagName}}" style="color: #b6b9ba;font-size: {{ format_font(tag.Id) + 9  }}px">{{
             tag.TagName}}</a>
         {% endfor %}
     </div>

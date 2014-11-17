@@ -7,7 +7,7 @@ from CommentModel import *
 fe = Blueprint('fe', __name__)
 
 
-@fe.route('/<tagname>', methods=['GET'])
+@fe.route('/tag/<tagname>', methods=['GET'])
 def hometags(tagname=None):
 
     tag = TagModel()
