@@ -192,7 +192,6 @@ class PostModel:
             for p in posts:
                 db.session.delete(p)
                 os.remove(UPLOAD_FOLDER + p.FileName)
-                os.remove(UPLOAD_FOLDER + "th_" + p.FileName)
             db.session.commit()
         return False
 
@@ -220,7 +219,6 @@ class PostModel:
             for p in posts:
                 db.session.delete(p)
                 os.remove(UPLOAD_FOLDER + p.FileName)
-                os.remove(UPLOAD_FOLDER + "th_" + p.FileName)
             db.session.commit()
         return False
 
