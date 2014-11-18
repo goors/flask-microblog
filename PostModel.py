@@ -1,7 +1,7 @@
 from flask import session
 from werkzeug import secure_filename
 import os
-
+import CommentModel
 UPLOAD_FOLDER = 'static/files/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -191,7 +191,8 @@ class PostModel:
         if (posts):
             for p in posts:
                 db.session.delete(p)
-                os.remove(UPLOAD_FOLDER + p.FileName)
+                if os.path.isfile(UPLOAD_FOLDER + p.FileName):
+                    os.remove(UPLOAD_FOLDER + p.FileName)
             db.session.commit()
         return False
 
@@ -204,8 +205,9 @@ class PostModel:
         if (posts):
             for p in posts:
                 db.session.delete(p)
-                os.remove(UPLOAD_FOLDER + p.ImageName)
-                os.remove(UPLOAD_FOLDER + "th_" + p.ImageName)
+                if os.path.isfile(UPLOAD_FOLDER + p.FileName) and os.path.isfile(UPLOAD_FOLDER + "th_"+p.FileName):
+                    os.remove(UPLOAD_FOLDER + p.FileName)
+                    os.remove(UPLOAD_FOLDER + "th_" + p.ImageName)
             db.session.commit()
         return False
 
@@ -218,6 +220,8 @@ class PostModel:
         if (posts):
             for p in posts:
                 db.session.delete(p)
+                if os.path.isfile(UPLOAD_FOLDER + p.FileName):
+                    os.remove(UPLOAD_FOLDER + p.FileName)
                 os.remove(UPLOAD_FOLDER + p.FileName)
             db.session.commit()
         return False
@@ -231,8 +235,16 @@ class PostModel:
         if (posts):
             for p in posts:
                 db.session.delete(p)
-                os.remove(UPLOAD_FOLDER + "th_" + p.ImageName)
+                if os.path.isfile(UPLOAD_FOLDER + p.FileName) and os.path.isfile(UPLOAD_FOLDER + "th_"+p.FileName):
+                    os.remove(UPLOAD_FOLDER + p.FileName)
+                    os.remove(UPLOAD_FOLDER + "th_" + p.ImageName)
             db.session.commit()
         return False
 
+    def getNumberOfComments(self, post):
+        commentsNo = self.Comment.query.filter_by(Post=post).count()
+
+        if commentsNo:
+            return commentsNo
+        return False
 

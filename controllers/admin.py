@@ -43,6 +43,7 @@ def addpost():
 
 @admin_api.route('/admin/edit-post/<id>', methods=['POST','GET'])
 def editpost(id=None):
+
     post = PostModel()
 
     tags = TagModel()
@@ -68,9 +69,9 @@ def editpost(id=None):
 
         post.addTags(request.form.getlist('tags'), id)
 
-        if(len(request.files.getlist("files")) > 1):
+        if request.files["files"]:
             post.addFiles(request.files.getlist("files"), id)
-        if(len(request.files.getlist("images")) > 1):
+        if request.files["images"]:
             post.addImages(request.files.getlist("images"), id)
 
     single = post.getPost(id)
@@ -144,4 +145,10 @@ def adduser():
 
     return render_template("admin/add-user.html")
 
+@admin_api.context_processor
+def utility_processor():
+    def getNumberOfComments(id):
+        p = PostModel()
+        return p.getNumberOfComments(id)
+    return dict(getNumberOfComments=getNumberOfComments)
 

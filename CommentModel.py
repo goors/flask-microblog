@@ -23,5 +23,3 @@ class CommentModel:
         db.session.commit()
 
         return new_comment.Id
-
-
