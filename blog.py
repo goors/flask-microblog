@@ -13,8 +13,8 @@ admin_api = admin.admin_api
 fe = fe.fe
 
 app = Flask(__name__)
-Compress(app)
 
+Compress(app)
 
 app.register_blueprint(account_api)
 app.register_blueprint(static_api)
