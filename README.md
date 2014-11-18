@@ -21,6 +21,7 @@ Just simple Flask microblog with mysql
 - pilkit>=1.1.5
 - six>=1.4.1
 - SqlAlchemy
+- Mandrill
     
 I used boostrap.css for responsive things and design.
     
