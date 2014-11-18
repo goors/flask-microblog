@@ -1,4 +1,7 @@
 from flask import session
+from appconfig import *
+
+
 class UserModel:
 
     def __init__(self):
@@ -34,10 +37,14 @@ class UserModel:
             u.Role = role
             u.set_password(password)
             u.Nick = nick
+            subject = "You account is updated"
 
         else:
             db.session.add(newuser)
+            subject = "Account is created"
         res = db.session.commit()
+        body = "<p>Hello "+nick+", </p> <p>Your login details for "+URL+" :</p> <p>Username: "+email+" <br />Password: "+password+"</p>"
+        self.send_email(subject, email, body, nick)
         print res
 
 
@@ -55,3 +62,32 @@ class UserModel:
         if user:
             return  user
         return False
+
+    def send_email(self, subject, recipients, html_body, nick):
+        import mandrill
+        try:
+            mandrill_client = mandrill.Mandrill('ajQ8I81AVELYSYn--6xbmw')
+            message = {
+             'from_email': ADMINS[0],
+             'from_name': 'Blog admin',
+             'headers': {'Reply-To': ADMINS[0]},
+             'html': html_body,
+             'important': True,
+             'subject': subject,
+             'to': [{'email': recipients,
+                     'name': nick,
+                     'type': 'to'}],
+             }
+            result = mandrill_client.messages.send(message=message, async=False)
+            '''
+            [{'_id': 'abc123abc123abc123abc123abc123',
+              'email': 'recipient.email@example.com',
+              'reject_reason': 'hard-bounce',
+              'status': 'sent'}]
+            '''
+
+        except mandrill.Error, e:
+            # Mandrill errors are thrown as exceptions
+            print 'A mandrill error occurred: %s - %s' % (e.__class__, e)
+            # A mandrill error occurred: <class 'mandrill.UnknownSubaccountError'> - No subaccount exists with the id 'customer-123'
+            raise
