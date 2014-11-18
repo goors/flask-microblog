@@ -246,5 +246,5 @@ class PostModel:
 
         if commentsNo:
             return commentsNo
-        return False
+        return 0
 
