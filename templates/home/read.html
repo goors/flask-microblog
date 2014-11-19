@@ -26,6 +26,7 @@
                     {% endfor %}<hr />
                 {% endif %}
             {% if getimages(post.Id) %}
+                <div class="fotorama" data-nav="thumbs">
                 <hr />
                 {% for image in getimages(post.Id) %}
                 {% set im = "/static/files/th_"~image.ImageName%}
@@ -33,7 +34,7 @@
 
                 <a href="{{imB}}"><img src="{{ im }}" style="border: 1px solid #ccc; padding: 1px;"></a>
                 {% endfor %}
-            <hr />
+                    </div>
                 {% endif %}
             <div class="col-lg-12" style="text-align: left">
                 {{ post.Content|safe }}

@@ -32,7 +32,8 @@
                         <td style="vertical-align: middle">{{ post.DateCreated }}</td>
                         <td style="vertical-align: middle">
                             <a href="/admin/edit-post/{{post.Id}}">Edit</a> <br />
-                            <a href="/admin/delete-post/{{ post.Id}}">Delete</a>
+                            <a href="/admin/delete-post/{{ post.Id}}">Delete</a> <br />
+                            <a href="/read/{{ post.Slug }}" target="_blank">Preview</a>
                         </td>
 
                     </tr>

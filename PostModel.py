@@ -130,18 +130,22 @@ class PostModel:
     def addImages(self, images, post):
 
         from models import db
-        from PIL import Image
-        import glob, os
+        import os
 
-        size = 80, 80
 
         for image in images:
+
+
+
             filename = secure_filename(image.filename)
             image.save(os.path.join(UPLOAD_FOLDER, filename))
 
-            im = Image.open(UPLOAD_FOLDER + filename)
+            self.generateImage(80, 80, filename, "th_")
+            self.generateImage(400, 400, filename, "gallery_")
+
+            '''im = Image.open(UPLOAD_FOLDER + filename)
             im.thumbnail(size, Image.ANTIALIAS)
-            im.save(UPLOAD_FOLDER + "th_" + filename, "JPEG")
+            im.save(UPLOAD_FOLDER + "th_" + filename, "JPEG")'''
 
             pi = self.PostImage(post, filename)
             db.session.add(pi)
@@ -205,9 +209,10 @@ class PostModel:
         if (posts):
             for p in posts:
                 db.session.delete(p)
-                if os.path.isfile(UPLOAD_FOLDER + p.FileName) and os.path.isfile(UPLOAD_FOLDER + "th_"+p.FileName):
-                    os.remove(UPLOAD_FOLDER + p.FileName)
+                if os.path.isfile(UPLOAD_FOLDER + p.ImageName) and os.path.isfile(UPLOAD_FOLDER + "th_"+p.ImageName) and os.path.isfile(UPLOAD_FOLDER + "gallery_"+p.ImageName):
+                    os.remove(UPLOAD_FOLDER + p.ImageName)
                     os.remove(UPLOAD_FOLDER + "th_" + p.ImageName)
+                    os.remove(UPLOAD_FOLDER + "gallery_" + p.ImageName)
             db.session.commit()
         return False
 
@@ -235,9 +240,10 @@ class PostModel:
         if (posts):
             for p in posts:
                 db.session.delete(p)
-                if os.path.isfile(UPLOAD_FOLDER + p.FileName) and os.path.isfile(UPLOAD_FOLDER + "th_"+p.FileName):
-                    os.remove(UPLOAD_FOLDER + p.FileName)
+                if os.path.isfile(UPLOAD_FOLDER + p.ImageName) and os.path.isfile(UPLOAD_FOLDER + "th_"+p.ImageName) and os.path.isfile(UPLOAD_FOLDER + "gallery_"+p.ImageName):
+                    os.remove(UPLOAD_FOLDER + p.ImageName)
                     os.remove(UPLOAD_FOLDER + "th_" + p.ImageName)
+                    os.remove(UPLOAD_FOLDER + "gallery_" + p.ImageName)
             db.session.commit()
         return False
 
@@ -247,4 +253,16 @@ class PostModel:
         if commentsNo:
             return commentsNo
         return 0
+
+    def generateImage(self, size_w, size_h, filename, ex):
+
+        from PIL import Image
+
+        size = size_w, size_h
+
+        im = Image.open(UPLOAD_FOLDER + filename)
+        im.thumbnail(size, Image.ANTIALIAS)
+        im.save(UPLOAD_FOLDER + ex + filename, "JPEG")
+
+
 

@@ -32,12 +32,13 @@ def addpost():
         pid = post.addPost(request.form['title'], request.form['slug'], request.form['content'], request.files['photo'], active)
         post.addTags(request.form.getlist('tags'), pid);
 
-        if(request.files.getlist("files")):
+        if(request.files["files"]):
             post.addFiles(request.files.getlist("files"), pid)
 
-        if(request.files.getlist("images")):
+        if(request.files["images"]):
             post.addImages(request.files.getlist("images"), pid)
-    return redirect("/admin/edit-post/"+pid)
+        return redirect("/admin/edit-post/"+str(pid))
+    return render_template("admin/add-post.html", tags=tags.tags())
 
 
 @admin_api.route('/admin/edit-post/<id>', methods=['POST','GET'])
