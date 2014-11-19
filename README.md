@@ -1,17 +1,17 @@
-Just simple Flask microblog with mysql
+Flask microblog with mysql and sqlAlchemy
 =========
 
-- With this blog you can:
+## With this blog you can:
 
-    - login as admin
-    - crud posts
-    - crud users
-    - crud on comments
-    - add files to post
-    - add photo gallery for post
-    - add tags
-    - view posts by tags
-    - add comment(s)
+- login as admin
+- crud posts
+- crud users
+- crud on comments
+- add files to post
+- add photo gallery for post
+- add tags
+- view posts by tags
+- add comment(s)
     
     
 ## Requirements  

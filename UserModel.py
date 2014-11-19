@@ -30,7 +30,7 @@ class UserModel:
 
     def register(self, email, password, nick, role, id = None):
         from models import db
-        newuser = self.User(nick, email, role, password)
+
         if id:
             u = self.User.query.filter_by(Id=id).first()
             u.Email = email
@@ -40,12 +40,14 @@ class UserModel:
             subject = "You account is updated"
 
         else:
-            db.session.add(newuser)
+            u = self.User(nick, email, role, password)
+            db.session.add(u)
             subject = "Account is created"
+
         res = db.session.commit()
         body = "<p>Hello "+nick+", </p> <p>Your login details for "+URL+" :</p> <p>Username: "+email+" <br />Password: "+password+"</p>"
         self.send_email(subject, email, body, nick)
-        print res
+        return u.Id
 
 
     def list(self):

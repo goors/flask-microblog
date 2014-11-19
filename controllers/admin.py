@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, redirect, url_for, request, json
+from flask import Blueprint, render_template, session, redirect, url_for, request, json, flash
 from PostModel import  *
 from TagModel import  *
 from UserModel import  *
@@ -37,8 +37,7 @@ def addpost():
 
         if(request.files.getlist("images")):
             post.addImages(request.files.getlist("images"), pid)
-
-    return render_template('admin/add-post.html', tags=tags.tags())
+    return redirect("/admin/edit-post/"+pid)
 
 
 @admin_api.route('/admin/edit-post/<id>', methods=['POST','GET'])
@@ -73,6 +72,7 @@ def editpost(id=None):
             post.addFiles(request.files.getlist("files"), id)
         if request.files["images"]:
             post.addImages(request.files.getlist("images"), id)
+        flash('You have successfully update post.')
 
     single = post.getPost(id)
     postTags = post.getPostTags(id)
@@ -133,7 +133,7 @@ def edituser(id = None):
 
     if request.method == "POST":
         user.register(request.form['email'], request.form['password'], request.form['nick'], request.form['role'], id)
-
+        flash('You have successfully update user.')
     return render_template("admin/add-user.html", user=user.getUser(id))
 
 @admin_api.route('/admin/register', methods=['GET','POST'])
@@ -141,9 +141,8 @@ def adduser():
     user = UserModel()
 
     if request.method == "POST":
-        user.register(request.form['email'], request.form['password'], request.form['nick'], request.form['role'])
-
-    return render_template("admin/add-user.html")
+        u = user.register(request.form['email'], request.form['password'], request.form['nick'], request.form['role'])
+    return redirect("/admin/edit-user/"+u)
 
 @admin_api.context_processor
 def utility_processor():
