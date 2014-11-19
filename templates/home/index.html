@@ -49,7 +49,7 @@
             <div class="col-lg-8" style="text-align: left">
                 {{ snap(post.Content)|safe }}
                 {% if getimages(post.Id) %}
-                    <div class="fotorama" data-nav="thumbs">
+                    <div class="fotorama" data-nav="thumbs" data-allowfullscreen="true">
                         <hr />
                         {% for image in getimages(post.Id) %}
                             {% set im = "/static/files/th_"~image.ImageName%}

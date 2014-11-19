@@ -26,7 +26,7 @@
                     {% endfor %}<hr />
                 {% endif %}
             {% if getimages(post.Id) %}
-                <div class="fotorama" data-nav="thumbs">
+                <div class="fotorama" data-nav="thumbs" data-allowfullscreen="true">
                 <hr />
                 {% for image in getimages(post.Id) %}
                 {% set im = "/static/files/th_"~image.ImageName%}
