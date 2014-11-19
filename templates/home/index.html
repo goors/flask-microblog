@@ -6,6 +6,8 @@
         {% endfor %}
 {% endblock %}
 {% block body %}
+
+
 <div class="col-xs-12">
     <div style="text-align: center;" class="col-xs-12">
         {% for tag in tags%}
@@ -47,6 +49,7 @@
             <div class="col-lg-8" style="text-align: left">
                 {{ snap(post.Content)|safe }}
                 {% if getimages(post.Id) %}
+                <div class="fotorama" data-nav="thumbs">
                 <hr />
                 {% for image in getimages(post.Id) %}
                 {% set im = "/static/files/th_"~image.ImageName%}
@@ -54,6 +57,7 @@
 
                 <a href="{{imB}}"><img src="{{ im }}" style="border: 1px solid #ccc; padding: 1px;"></a>
                 {% endfor %}
+                    </div>
                 {% endif %}
                 <div style="clear: both;"></div>
             </div>
