@@ -22,6 +22,7 @@ Flask microblog with mysql and sqlAlchemy
 - six>=1.4.1
 - SqlAlchemy
 - Mandrill
+- django-htmlmin
     
 I used boostrap.css for responsive things and design.
     
