@@ -3,7 +3,7 @@ from TagModel import *
 from PostModel import *
 from UserModel import *
 from CommentModel import *
-
+from htmlmin.minify import html_minify
 fe = Blueprint('fe', __name__)
 
 
@@ -13,14 +13,17 @@ def hometags(tagname=None):
     tag = TagModel()
     post = PostModel()
     tagId = tag.getTagByName(tagname)
-    return render_template("home/index.html", tags=tag.tags(), posts=post.posts(None, tagId))
+    t = render_template("home/index.html", tags=tag.tags(), posts=post.posts(None, tagId))
+    return html_minify(unicode(t).encode('utf-8'))
 
 @fe.route('/', methods=['GET'])
 def home():
 
     tag = TagModel()
     post = PostModel()
-    return render_template("home/index.html", tags=tag.tags(), posts=post.posts(True, None))
+
+    t = render_template("home/index.html", tags=tag.tags(), posts=post.posts(True, None))
+    return html_minify(unicode(t).encode('utf-8'))
 
 
 @fe.route('/read/<slug>', methods=['GET','POST'])
@@ -43,8 +46,8 @@ def read(slug=None):
 
             comment.addcomment(request.form['comment'], request.form['email'], request.form['nick'], id.Id)
 
-    return render_template("home/read.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments(id), postFiles=postFiles)
-
+    t = render_template("home/read.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments(id), postFiles=postFiles)
+    return html_minify(unicode(t).encode('utf-8'))
 #helper methods
 
 @fe.context_processor
