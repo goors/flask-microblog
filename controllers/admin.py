@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, session, redirect, url_for, reques
 from PostModel import  *
 from TagModel import  *
 from UserModel import  *
+from werkzeug import generate_password_hash, check_password_hash
 
 admin_api = Blueprint('admin_api', __name__)
 
@@ -27,9 +28,10 @@ def addpost():
 
     tags = TagModel()
     if request.method == "POST":
-        active = 1 if request.form.get('active') else 0
+        active = '1' if request.form.get('active') else '0'
+        password = generate_password_hash(request.form['password']) if request.form.get('password') else 'NULL'
         post = PostModel()
-        pid = post.addPost(request.form['title'], request.form['slug'], request.form['content'], request.files['photo'], active)
+        pid = post.addPost(request.form['title'], request.form['slug'], request.form['content'], request.files['photo'], active, None,password)
         post.addTags(request.form.getlist('tags'), pid);
 
         if(request.files["files"]):
@@ -50,8 +52,9 @@ def editpost(id=None):
 
     if request.method == "POST":
 
-
+        single = post.getPost(id)
         active = '1' if request.form.get('active') else '0'
+        password = generate_password_hash(request.form['password']) if request.form.get('password') else single.Password
         if request.files['photo']:
 
             file = request.files['photo']
@@ -65,7 +68,8 @@ def editpost(id=None):
             request.form['content'],
             file,
             active,
-            id)
+            id,
+            password)
 
         post.addTags(request.form.getlist('tags'), id)
 

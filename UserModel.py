@@ -44,7 +44,7 @@ class UserModel:
             db.session.add(u)
             subject = "Account is created"
 
-        res = db.session.commit()
+        db.session.commit()
         body = "<p>Hello "+nick+", </p> <p>Your login details for "+URL+" :</p> <p>Username: "+email+" <br />Password: "+password+"</p>"
         self.send_email(subject, email, body, nick)
         return u.Id

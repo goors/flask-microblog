@@ -46,7 +46,18 @@ def read(slug=None):
 
             comment.addcomment(request.form['comment'], request.form['email'], request.form['nick'], id.Id)
 
-    t = render_template("home/read.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments(id), postFiles=postFiles)
+        if 'password' in request.form:
+
+            from werkzeug import check_password_hash
+
+            if check_password_hash(id.Password, request.form['password']):
+                t = render_template("home/read.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments(id), postFiles=postFiles)
+                return html_minify(unicode(t).encode('utf-8'))
+
+    if id.Password != 'NULL':
+        t = render_template("home/read-with-password.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments(id), postFiles=postFiles)
+    else:
+        t = render_template("home/read.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments(id), postFiles=postFiles)
     return html_minify(unicode(t).encode('utf-8'))
 #helper methods
 

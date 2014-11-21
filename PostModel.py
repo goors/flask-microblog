@@ -29,7 +29,8 @@ class PostModel:
     def posts(self, fe=None, tag=None):
 
         if fe:
-            return self.Post.query.filter_by(PostStatus='1').order_by(self.Post.Id.desc()).all()
+
+            return self.Post.query.filter_by(PostStatus='1', Password = 'NULL').order_by(self.Post.Id.desc()).all()
 
         elif tag:
             return self.Post.query.join(self.Post.tags).filter(self.Tag.Id == tag).all()
@@ -37,7 +38,7 @@ class PostModel:
             return self.Post.query.all()
 
 
-    def addPost(self, title, slug, content, file, active, id=None):
+    def addPost(self, title, slug, content, file, active, id=None, password=None):
 
         from models import db
 
@@ -58,11 +59,12 @@ class PostModel:
             p.Content = content
             p.Photo = filename
             p.PostStatus = active
+            p.Password = password
             db.session.commit()
 
         else:
 
-            p = self.Post(title, content, filename, session['Id'], slug, active, 0)
+            p = self.Post(title, content, filename, session['Id'], slug, active, 0, password)
             db.session.add(p)
             db.session.commit()
 
