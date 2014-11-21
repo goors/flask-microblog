@@ -266,5 +266,11 @@ class PostModel:
         im.thumbnail(size, Image.ANTIALIAS)
         im.save(UPLOAD_FOLDER + ex + filename, "JPEG")
 
+    def postRemovePass(self, id):
+        from models import db
+        p = self.Post.query.filter_by(Id=id).first()
+        p.Password = 'NULL'
+        db.session.commit()
+
 
 

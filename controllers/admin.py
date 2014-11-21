@@ -126,6 +126,15 @@ def deletepost(id=None):
     post.deletePost(id)
     return redirect("/admin")
 
+@admin_api.route('/admin/remove-password', methods=['POST'])
+def removepassword():
+    if request.json['id']:
+            post = PostModel()
+            post.postRemovePass(request.json['id'])
+            response = {'status': 1, 'message': "Deleted"}
+
+    return json.jsonify(response)
+
 
 @admin_api.route('/admin/users', methods=['GET'])
 def users():
