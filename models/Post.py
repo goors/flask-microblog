@@ -23,14 +23,16 @@ class Post(db.Model):
     PostStatus = db.Column(db.Enum("0", "1"))
     User = db.Column(db.Integer, db.ForeignKey(User.Id))
     tags = db.relationship("Tag", secondary=tags)
+    Password = db.Column(db.String(128))
 
-    def __init__(self, title, content, photo, user, slug, status, noofviews):
+    def __init__(self, title, content, photo, user, slug, status, noofviews, password):
         self.Title = title
         self.Content = content
         self.Photo = photo
         self.User = user
         self.NoOfViews = noofviews
         self.Slug = slug
+        self.Password = password
 
         self.PostStatus = status
         self.DateCreated = time.strftime('%Y-%m-%d %H:%M:%S')
