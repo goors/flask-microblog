@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS `Post` (
   `User` int(11) NOT NULL,
   `Slug` varchar(45) NOT NULL,
   `NoOfViews` int(11) NOT NULL,
-  `PostStatus` enum('0','1') NOT NULL
+  `PostStatus` enum('0','1') NOT NULL,
+  `Password` varchar(128) DEFAULT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
@@ -185,6 +186,9 @@ ADD CONSTRAINT `Post` FOREIGN KEY (`Post`) REFERENCES `Post` (`Id`) ON DELETE NO
 --
 ALTER TABLE `Post`
 ADD CONSTRAINT `User` FOREIGN KEY (`User`) REFERENCES `User` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE `Post`
+ ADD PRIMARY KEY (`Id`), ADD KEY `User_idx` (`User`), ADD KEY `Password` (`Password`);
 
 --
 -- Constraints for table `PostTag`
