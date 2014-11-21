@@ -30,7 +30,7 @@ class PostModel:
 
         if fe:
 
-            return self.Post.query.filter_by(PostStatus='1', Password = 'NULL').order_by(self.Post.Id.desc()).all()
+            return self.Post.query.filter(PostStatus='1', Password = 'NULL').order_by(self.Post.Id.desc()).all()
 
         elif tag:
             return self.Post.query.join(self.Post.tags).filter(self.Tag.Id == tag).all()

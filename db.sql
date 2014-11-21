@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `Post` (
   `Slug` varchar(45) NOT NULL,
   `NoOfViews` int(11) NOT NULL,
   `PostStatus` enum('0','1') NOT NULL,
-  `Password` varchar(128) DEFAULT NULL
+  `Password` varchar(128) DEFAULT 'NULL'
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
