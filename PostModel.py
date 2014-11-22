@@ -272,5 +272,23 @@ class PostModel:
         p.Password = 'NULL'
         db.session.commit()
 
+    def generateSiteMap(self):
+
+        pages = []
+        articles_qry = self.Post.query.filter_by(PostStatus='1').order_by(self.Post.DateCreated.desc())
+        posts = articles_qry.all()
+        from flask import render_template, make_response
+        for post in posts:
+            url="https://pregmatch.org/read/"+post.Slug
+            modified_time=post.DateCreated.date().isoformat()
+            pages.append([url,modified_time])
+
+        sitemap_xml = render_template('sitemap.xml', pages=pages)
+        response= make_response(sitemap_xml)
+        response.headers["Content-Type"] = "application/xml"
+
+        return response
+
+
 
 

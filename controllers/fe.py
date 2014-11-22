@@ -59,6 +59,12 @@ def read(slug=None):
     else:
         t = render_template("home/read.html", tags=tag.tags(), post=post.post(slug), comments = comment.comments(id), postFiles=postFiles)
     return html_minify(unicode(t).encode('utf-8'))
+
+
+@fe.route("/sitemap.xml", methods=["GET"])
+def sitemap():
+    p =  PostModel()
+    return p.generateSiteMap()
 #helper methods
 
 @fe.context_processor
