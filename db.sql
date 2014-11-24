@@ -220,3 +220,7 @@ CREATE TABLE IF NOT EXISTS `pregmatch`.`PostImage` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+
+ALTER table Comment add `Parent` int(11) DEFAULT NULL;
+ALTER TABLE `Comment` ADD KEY `Parent` (`Parent`);
+ALTER TABLE `Comment` ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`Parent`) REFERENCES `Comment` (`Id`);
