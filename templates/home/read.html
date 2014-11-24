@@ -43,7 +43,7 @@
 
         </div>
         <div class="col-xs-12">
-            <form method="post" action="/read/{{post.Slug}}">
+            <form method="post" action="/read/{{post.Slug}}" id="c_{{post.Slug}}">
                 <br />
                 <div class="form-group">
                     <input type="text" class="form-control" name="nick" placeholder="Nick (optional)" />
@@ -54,16 +54,25 @@
                 <textarea name="comment" class="form-control" rows="10" placeholder="Comment (mandatory)"></textarea>
                 <span style="font-size: 11px; float: left">You can use any html tag (p, pre ...)</span><br />
                 <input type="submit" value="Add comment" class="btn btn-primary" style="float: right" />
+                <input type="hidden" class="cid" name="cid" />
             </form>
             <div class="col-lg-12" style="text-align: left">
                 {% if comments %}
                 <hr />
-                {% for comment in comments%}
-                <span>Comment by: {{ comment.Nick }} - <span style="font-size: 11px;">created at {{ comment.DateCreated }}</span></span><br />
-                <div class="col-lg-12" style="text-align: left; margin-top: 10px">
-                    {{comment.Comment | safe}}
-                </div>
+                <ul style="list-style: none; panel panel-info">
+                {% for comment in comments recursive%}
+                    <li class="">
+                        <span style="font-size: 11px">{{ comment.Nick }} - <span style="font-size: 11px;">created at {{ comment.DateCreated }}</span> </span> |
+                        <a href="javascript: void(0)" onclick="javascript: reply($(this), '{{post.Slug}}', {{comment.Id}})">Reply</a> <br />
+                        <div class="col-lg-12" style="text-align: left; margin-top: 10px">
+                            {{comment.Comment | safe}}
+                        </div>
+                    {% if comment.children %}
+                        <ul style="list-style: none" >{{ loop(comment.children) }}</ul>
+                    {% endif %}
+                    </li>
                 {% endfor %}
+                </ul>
                 {% endif %}
             </div>
         </div>
@@ -82,4 +91,22 @@
 
     }
 </style>
+<script>
+
+    function reply(el, slug, id){
+
+
+        if(document.getElementsByClassName("d_"+slug).length){
+            $(".d_"+slug).remove();
+            el.text("Reply");
+        }
+        else {
+            $("#c_"+slug).clone().insertAfter(el.next().next()).attr("class","d_"+slug).find($(".cid").val(id));
+
+            el.text("Remove");
+
+        }
+    }
+
+</script>
 {% endblock %}
